@@ -48,7 +48,16 @@ async def upload_document(
     # Enqueue processing task
     process_document.delay(str(doc_id))
 
-    return DocumentOut.model_validate(doc)
+    # Build response directly — avoids lazy-loading the sections relationship
+    # in an async context (would raise MissingGreenlet).
+    return DocumentOut(
+        id=doc.id,
+        filename=doc.filename,
+        status=doc.status,
+        created_at=doc.created_at,
+        structured_json=doc.structured_json,
+        sections=[],
+    )
 
 
 @router.get("/", response_model=list[DocumentListItem])

@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class DocumentCreate(BaseModel):
@@ -11,6 +11,8 @@ class DocumentCreate(BaseModel):
 
 
 class SectionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     type: str
     content: str
@@ -18,11 +20,10 @@ class SectionOut(BaseModel):
     bbox_json: dict | None
     order_idx: int
 
-    class Config:
-        from_attributes = True
-
 
 class DocumentOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     filename: str
     status: str
@@ -30,18 +31,14 @@ class DocumentOut(BaseModel):
     structured_json: dict | None = None
     sections: list[SectionOut] = []
 
-    class Config:
-        from_attributes = True
-
 
 class DocumentListItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     filename: str
     status: str
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class DocumentStatus(BaseModel):

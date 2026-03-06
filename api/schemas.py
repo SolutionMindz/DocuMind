@@ -27,6 +27,7 @@ class DocumentOut(BaseModel):
     id: uuid.UUID
     filename: str
     status: str
+    file_size: int | None = None  # size in bytes
     created_at: datetime
     structured_json: dict | None = None
     sections: list[SectionOut] = []

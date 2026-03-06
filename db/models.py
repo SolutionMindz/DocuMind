@@ -18,6 +18,7 @@ class Document(Base):
     filename: Mapped[str] = mapped_column(String(255), nullable=False)
     file_path: Mapped[str] = mapped_column(String(1024), nullable=False)
     status: Mapped[str] = mapped_column(String(50), default="queued", nullable=False)
+    file_size: Mapped[int | None] = mapped_column(Integer, nullable=True)  # size in bytes
     structured_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 

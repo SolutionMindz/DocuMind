@@ -1,5 +1,31 @@
 import type { Section } from "@/lib/api";
 
+const TYPE_BADGE_LABEL: Record<string, string> = {
+  heading: "Heading",
+  paragraph: "Paragraph",
+  list: "List",
+  table: "Table",
+  figure: "Figure",
+};
+
+function TypeBadge({ type }: { type: string }) {
+  const label = TYPE_BADGE_LABEL[type] ?? type;
+  const isTable = type === "table";
+  const isHeading = type === "heading";
+  const isList = type === "list";
+  const className =
+    "inline-block rounded px-2 py-0.5 text-xs font-medium " +
+    (isTable
+      ? "bg-violet-100 text-violet-800"
+      : isHeading
+        ? "bg-gray-200 text-gray-700"
+        : isList
+          ? "bg-indigo-50 text-indigo-700"
+          : "bg-gray-100 text-gray-600");
+
+  return <span className={className}>{label}</span>;
+}
+
 interface Props {
   sections: Section[];
 }
@@ -19,29 +45,50 @@ export default function StructuredViewer({ sections }: Props) {
 }
 
 function SectionBlock({ section }: { section: Section }) {
+  const badge = <TypeBadge type={section.type} />;
+
   switch (section.type) {
     case "heading":
       return (
-        <h2 className="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-1">
-          {section.content}
-        </h2>
+        <div>
+          <div className="mb-1">{badge}</div>
+          <h2 className="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-1">
+            {section.content}
+          </h2>
+        </div>
       );
     case "table":
-      return <TableBlock content={section.content} />;
+      return (
+        <div>
+          <div className="mb-1">{badge}</div>
+          <TableBlock content={section.content} />
+        </div>
+      );
     case "list":
       return (
-        <p className="pl-4 text-sm text-gray-700 border-l-2 border-indigo-200">
-          {section.content}
-        </p>
+        <div>
+          <div className="mb-1">{badge}</div>
+          <p className="pl-4 text-sm text-gray-700 border-l-2 border-indigo-200">
+            {section.content}
+          </p>
+        </div>
       );
     case "figure":
       return (
-        <div className="rounded bg-gray-100 px-3 py-2 text-xs text-gray-400 italic">
-          [Figure on page {section.page_num}]
+        <div>
+          <div className="mb-1">{badge}</div>
+          <div className="rounded bg-gray-100 px-3 py-2 text-xs text-gray-400 italic">
+            [Figure on page {section.page_num}]
+          </div>
         </div>
       );
     default:
-      return <p className="text-sm leading-relaxed text-gray-700">{section.content}</p>;
+      return (
+        <div>
+          <div className="mb-1">{badge}</div>
+          <p className="text-sm leading-relaxed text-gray-700">{section.content}</p>
+        </div>
+      );
   }
 }
 

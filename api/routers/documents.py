@@ -34,12 +34,14 @@ async def upload_document(
 
     content = await file.read()
     file_path.write_bytes(content)
+    file_size = len(content)
 
     doc = Document(
         id=doc_id,
         filename=file.filename,
         file_path=str(file_path),
         status="queued",
+        file_size=file_size,
     )
     db.add(doc)
     await db.commit()
@@ -54,6 +56,7 @@ async def upload_document(
         id=doc.id,
         filename=doc.filename,
         status=doc.status,
+        file_size=doc.file_size,
         created_at=doc.created_at,
         structured_json=doc.structured_json,
         sections=[],

@@ -18,7 +18,7 @@ export default function DocumentCard({ doc }: Props) {
 
   return (
     <Link
-      href={`/documents/${doc.id}`}
+      href={`/d/${doc.id}`}
       className="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-4 shadow-sm transition hover:shadow-md"
     >
       <div className="min-w-0">
